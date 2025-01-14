@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<head>
+  <title>QR Tic-Tac-Toe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Syne', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8f9fa;
+      color: #3e3e3e;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      background: #ffe3e1;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    td {
+      width: 100px;
+      height: 100px;
+      border: 3px solid #76d3db;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 2.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      background: #fff;
+    }
+
+    td.disabled {
+      pointer-events: none;
+      background: #e6e6e6;
+    }
+
+    button {
+      background: #76d3db;
+      color: #383838;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 30px;
+      font-family: 'Syne', sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>QR Tic-Tac-Toe</h1>
+  <table>
+    <tr>
+      <td onclick="play(0)"></td>
+      <td onclick="play(1)"></td>
+      <td onclick="play(2)"></td>
+    </tr>
+    <tr>
+      <td onclick="play(3)"></td>
+      <td onclick="play(4)"></td>
+      <td onclick="play(5)"></td>
+    </tr>
+    <tr>
+      <td onclick="play(6)"></td>
+      <td onclick="play(7)"></td>
+      <td onclick="play(8)"></td>
+    </tr>
+  </table>
+  <button onclick="restartGame()">Restart</button>
+
+  <script>
+    let board = Array(9).fill(null),
+      player = 'X',
+      gameActive = true;
+
+    const play = (i) => {
+      if (gameActive && !board[i]) {
+        board[i] = player;
+        renderMove(i);
+        if (checkWin()) {
+          alert(`${player} wins!`);
+          disableBoard();
+          gameActive = false;
+        } else {
+          player = player === 'X' ? 'O' : 'X';
+        }
+      }
+    };
+
+    const renderMove = (i) => {
+      document.querySelectorAll('td')[i].textContent = player;
+    };
+
+    const checkWin = () => {
+      const winPatterns = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+      ];
+      return winPatterns.some(pattern =>
+        pattern.every(i => board[i] === player)
+      );
+    };
+
+    const disableBoard = () =>
+      document.querySelectorAll('td').forEach(cell => cell.classList.add('disabled'));
+
+    const restartGame = () => {
+      board.fill(null);
+      player = 'X';
+      gameActive = true;
+      document.querySelectorAll('td').forEach(cell => {
+        cell.textContent = '';
+        cell.classList.remove('disabled');
+      });
+    };
+  </script>
+</body>
+
+</html>
